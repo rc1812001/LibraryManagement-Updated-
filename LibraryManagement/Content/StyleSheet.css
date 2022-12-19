@@ -1,4 +1,7 @@
-﻿body {
+﻿html {
+    height: 100%;
+}
+body {
     
     color: #1A1A1A;
     font-size: 1.5em;
@@ -27,9 +30,12 @@
 }
 
 body {
-   
-    background-color: greenyellow; /* For browsers that do not support gradients */
-    background-image: linear-gradient(to right,red,yellow );
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background: rgb(34,193,195);
+    background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
 }
 
 .altRow {

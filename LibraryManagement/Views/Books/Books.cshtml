@@ -51,7 +51,7 @@
             grid.Column("CATEGORY"),
             grid.Column("STATUS", "AvailabilityStatus"),
             grid.Column("AUTHOR", "Author List"),
-            grid.Column("", header: "Action", format: @<text>@Html.ActionLink("Edit", "Edit", new { id = item.BOOK_ID }) | @Html.ActionLink("Delete", "Delete", new { id = item.BOOK_ID })</text>)));
+            grid.Column("", header: "Action", format: @<text>@Html.ActionLink("Edit", "Edit", new { id = item.BOOK_ID }, new { @class = "btn btn-primary" }) | @Html.ActionLink("Delete", "Delete", new { id = item.BOOK_ID }, new { @class = "btn btn-danger" })</text>)));
         }
         else
         {
