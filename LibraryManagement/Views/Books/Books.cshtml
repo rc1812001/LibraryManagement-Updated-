@@ -1,0 +1,69 @@
+﻿@model IEnumerable<LibraryManagement.BOOK>
+@{
+    ViewBag.Title = "Books";
+}
+
+
+<link href="../Content/StyleSheet.css" rel="stylesheet" />
+
+<h1> Knowledge Library</h1>
+
+@if (Session["USER_NAME"] != null)
+{
+    <h2><text><marquee>Welcome @Session["USER_NAME"].ToString() </marquee></text></h2>
+    }
+
+@using (Html.BeginForm("Logout", "Login"))
+{
+    <input type="submit" value="Logout" />
+}
+
+
+
+@using (Html.BeginForm("Search", "Books", FormMethod.Post, new { @class = "Search-form" }))
+{
+    <div id="txtBox">
+        @Html.Label("Search Books ")
+        <input type="text" name="q" />
+    </div>
+    <div id="radioList">
+
+        @Html.RadioButton("SearchType", "0")
+        @Html.Label("ID")
+        @Html.RadioButton("SearchType", "1", true)
+        @Html.Label("Title/Category")
+
+    </div>
+    <div id="btnSearch">
+        <input type="submit" value="Search" id="btnSubmit" />
+    </div>
+}
+
+<div id="DivGrid">
+    @{
+        var grid = new WebGrid(source: Model, canPage: true, rowsPerPage: 2, defaultSort: "BOOK_ID");
+        if (Model.Count() > 0)
+        {
+            <div><strong> @ViewBag.SearchParameter</strong> | @grid.TotalRowCount @Html.Label("Record(s) found")</div>
+            @grid.GetHtml(tableStyle: "PGrid", headerStyle: "Header", htmlAttributes: new { id = "DataTable" }, columns: grid.Columns(
+            grid.Column("BOOK_ID", "Book ID"),
+            grid.Column("BOOK_NAME", "Book Title"),
+            grid.Column("CATEGORY"),
+            grid.Column("STATUS", "AvailabilityStatus"),
+            grid.Column("AUTHOR", "Author List"),
+            grid.Column("", header: "Action", format: @<text>@Html.ActionLink("Edit", "Edit", new { id = item.BOOK_ID }) | @Html.ActionLink("Delete", "Delete", new { id = item.BOOK_ID })</text>)));
+        }
+        else
+        {
+            <hr />@Html.Label("No, Record(s) not found")<hr />
+        }
+    }
+</div>
+   
+
+@using (Html.BeginForm("Create", "Books", FormMethod.Get))
+{
+    <input type="submit" value="Add Book" />
+}
+ 
+

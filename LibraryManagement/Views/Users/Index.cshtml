@@ -1,0 +1,127 @@
+﻿@model  LibraryManagement.Web.Models.UserModel
+
+@{
+    ViewBag.Title = "Index";
+}
+<head>
+    <style>
+        body {
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-image: url('../Content/image/login-bg.jpg');
+        }
+
+        #inside-box {
+            border: 1px solid black;
+            margin: 10% auto 10% auto;
+            max-width: 500px;
+            min-width: 200px;
+            padding-left: 60px;
+            padding-right: 60px;
+            padding-bottom: 50px;
+            border-radius: 10px;
+            background-color: whitesmoke;
+        }
+
+    </style>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <script src="js/bootstrap.min.js"></script>
+    <script src="http://code.jquery.com/jquery.js"></script>
+</head>
+
+    @if (ViewBag.Message != null)
+    {
+        <div style="color:red">
+            @ViewBag.Message
+        </div>
+    }
+
+
+
+    @using (Html.BeginForm("Create", "Users", FormMethod.Post))
+    {
+        <div id="inside-box">
+            <center><h2>Register User</h2></center>
+            <div>
+                @Html.LabelFor(x => x.USER_NAME)
+                <div>
+                    @Html.TextBoxFor(m => m.USER_NAME, new { @class = "", placeholder = "EnterUserName", style = "margin-bottom:8px;" })
+                    @Html.ValidationMessageFor(y => y.USER_NAME, "", new { @style = "color:red" })
+                </div>
+            </div>
+            <br />
+
+            <div>
+                @Html.LabelFor(x => x.FIRST_NAME)
+                <div>
+                    @Html.TextBoxFor(m => m.FIRST_NAME, new { @class = "", placeholder = "EnterUserName", style = "margin-bottom:8px;" })
+                    @Html.ValidationMessageFor(y => y.USER_NAME, "", new { @style = "color:red" })
+                </div>
+            </div>
+
+            <div>
+                @Html.LabelFor(x => x.LAST_NAME)
+                <div>
+                    @Html.TextBoxFor(m => m.LAST_NAME, new { @class = "", placeholder = "EnterUserName", style = "margin-bottom:8px;" })
+                    @Html.ValidationMessageFor(y => y.LAST_NAME, "", new { @style = "color:red" })
+                </div>
+            </div>
+            <br />
+
+            <label>Gender:</label>
+
+            <label>Male</label>
+            @Html.RadioButtonFor(m => m.GENDER, "Male")
+
+            <label>Female</label>
+            @Html.RadioButtonFor(m => m.GENDER, "Female")
+            <br />
+
+
+            <div>
+                @Html.LabelFor(x => x.MOBILE)
+                <div>
+                    @Html.TextBoxFor(m => m.MOBILE, new { @class = "", placeholder = "Enter Mobile", style = "margin-bottom:8px;" })
+                    @Html.ValidationMessageFor(y => y.MOBILE, "", new { @style = "color:red" })
+                </div>
+            </div>
+            <br />
+
+
+            <div>
+                @Html.LabelFor(x => x.EMAIL_ID)
+                <div>
+                    @Html.TextBoxFor(m => m.EMAIL_ID, new { @class = "", placeholder = "Enter Email", style = "margin-bottom:8px;" })
+                    @Html.ValidationMessageFor(y => y.EMAIL_ID, "", new { @style = "color:red" })
+                </div>
+            </div>
+            <br />
+
+            <div>
+                @Html.LabelFor(x => x.PASSWORD)
+                <div>
+                    @Html.PasswordFor(m => m.PASSWORD, new { @class = "", placeholder = "Enter Password", style = "margin-bottom:8px;" })
+                    @Html.ValidationMessageFor(y => y.PASSWORD, "", new { @style = "color:red" })
+                </div>
+            </div>
+            <br />
+
+            <div>
+                @Html.LabelFor(x => x.CONFIRMPASSWORD)
+                <div>
+                    @Html.PasswordFor(m => m.CONFIRMPASSWORD, new { @class = "", placeholder = "Enter Confirm Password", style = "margin-bottom:8px;" })
+                    @Html.ValidationMessageFor(y => y.CONFIRMPASSWORD, "", new { @style = "color:red" })
+                </div>
+            </div>
+            <br />
+
+
+
+            <input type="submit" value="Register" />
+        </div>
+
+    }
+
+

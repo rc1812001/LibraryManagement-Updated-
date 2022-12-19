@@ -1,0 +1,76 @@
+﻿@model  LibraryManagement.Web.Models.LoginModel
+@{
+    ViewBag.Title = "View";
+}
+<head>
+    <style>
+        body {
+            background-size: cover; /* <------ */
+            background-repeat: no-repeat;
+            background-image: url('../../Content/image/login-bg.jpg');
+        }
+
+        #inside-box {
+            border: 1px solid black;
+            margin: 10% auto 10% auto;
+            max-width: 500px;
+            min-width: 200px;
+            padding-left: 60px;
+            padding-right: 60px;
+            border-radius: 10px;
+            background-color: whitesmoke;
+        }
+
+        #box {
+            border: 1px solid black;
+            height: 100%;
+        }
+    </style>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <script src="js/bootstrap.min.js"></script>
+    <script src="http://code.jquery.com/jquery.js"></script>
+</head>
+@using (Html.BeginForm())
+{
+    <div id="inside-box">
+        <fieldset>
+            <center><legend style="padding-top:15px;">Advanced Library</legend></center>
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            @if (ViewBag.Message != null)
+            {
+                <div style="color:red">
+                    @ViewBag.Message
+                </div>
+            }
+
+            <table style="border-collapse: separate; border-spacing: 0 15px ">
+                <tr>
+                    <td>@Html.LabelFor(a => a.USER_NAME)</td>
+                    <td>@Html.TextBoxFor(a => a.USER_NAME, new { @class = "", placeholder = "Enter UserName", style = "margin-bottom:8px;" })
+                    <td style="color:red ">@Html.ValidationMessageFor(a => a.USER_NAME)</td>
+
+                </tr>
+                <tr>
+                    <td> @Html.LabelFor(a => a.PASSWORD)</td>
+                    <td>@Html.PasswordFor(a => a.PASSWORD, new { @class = "", placeholder = "Enter Password", style = "margin-bottom:8px;" })</td>
+                    <td style="color:red">@Html.ValidationMessageFor(a => a.PASSWORD)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input style="margin-left:10px; height:35px; width:100px;" class="btn btn-success btn-block" type="submit" value="Login" />
+                    </td>
+                    <td>
+                        @Html.ActionLink("Not an existing user? Register here", "Index", "Users")
+                    </td>
+                </tr>
+            </table>
+
+        </fieldset>
+    </div>
+
+}

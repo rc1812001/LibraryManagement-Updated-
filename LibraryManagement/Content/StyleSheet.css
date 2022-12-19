@@ -1,0 +1,38 @@
+﻿body {
+    
+    color: #1A1A1A;
+    font-size: 1.5em;
+    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+    margin: 1.5em;
+    padding: 0;
+}
+
+.PGrid {
+    margin: 2%;
+    border-collapse: collapse;
+    width: 95%;
+}
+
+.Header {
+    font-weight: bold;
+    background-color: antiquewhite;
+    color: antiquewhite;
+    text-decoration: none;
+}
+
+.PGrid th, .PGrid td {
+    border: 1px solid #0094ff;
+    padding: 5px;
+    background-color:antiquewhite;
+}
+
+body {
+   
+    background-color: greenyellow; /* For browsers that do not support gradients */
+    background-image: linear-gradient(to right,red,yellow );
+}
+
+.altRow {
+    color: deepskyblue;
+    background-color: #808080;
+}

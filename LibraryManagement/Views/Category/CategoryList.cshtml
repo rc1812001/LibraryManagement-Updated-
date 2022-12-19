@@ -1,0 +1,55 @@
+﻿@model IEnumerable<LibraryManagement.CATEGORY>
+@{
+    ViewBag.Title = "Categories";
+}
+
+<link href="../Content/StyleSheet.css" rel="stylesheet" />
+<h1>Sacred Knowledge Library</h1>
+
+@if (Session["UserName"] != null)
+{
+    <h2><text>Welcomes @Session["UserName"].ToString() to Category List </text></h2>
+}
+
+
+
+
+@using (Html.BeginForm("Search", "Category", FormMethod.Post, new { @class = "Search-form" }))
+{
+    <div>
+        @Html.RadioButton("SearchType", "0")
+        @Html.Label("ID")
+        @Html.RadioButton("SearchType", "1", true)
+        @Html.Label("Category Name")
+        <input type="text" name="q" placeholder="Search Category" />
+        <input type="submit" value="Search" id="btnSubmit" />
+        @if (ViewBag.Message != null)
+        {
+            @ViewBag.Message.ToString();
+        }
+    </div>
+}
+
+
+<div id="DivGrid">
+    @{
+        var grid = new WebGrid(source: Model, canPage: true, rowsPerPage: 5, defaultSort: "CATEGORY_ID");
+        if (Model.Count() > 0)
+        {
+            <div><strong> @ViewBag.SearchParameter</strong> | @grid.TotalRowCount @Html.Label("Record(s) found")</div>
+            @grid.GetHtml(tableStyle: "PGrid", headerStyle: "Header", htmlAttributes: new { id = "DataTable" }, columns: grid.Columns(
+            grid.Column("CATEGORY_ID", "Category ID"),
+            grid.Column("CATEGORY_NAME", "Category Name")));
+        }
+        else
+        {
+            <hr />@Html.Label("No, Record(s) not found")<hr />
+        }
+    }
+</div>
+
+@using (Html.BeginForm("Create", "Category", FormMethod.Get))
+{
+    <input type="submit" value="Add " />
+}
+
