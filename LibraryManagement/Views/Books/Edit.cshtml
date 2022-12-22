@@ -25,7 +25,6 @@
     </style>
 </head>
 
-<h2>Edit</h2>
 
 @using (Html.BeginForm())
 {
@@ -33,7 +32,7 @@
         @Html.AntiForgeryToken()
 
         <div class="form-horizontal">
-            <h4>Book</h4>
+            <h4 >EDIT BOOK</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.HiddenFor(model => model.BOOK_ID)
@@ -55,13 +54,13 @@
                     @Html.ValidationMessageFor(model => model.CATEGORY, "", new { @class = "text-danger" })
                 </div>
             </div>
-            <div class="form-group" style="padding-left:100px">
+            <div class="form-group" style="padding-left:80px">
                 <label>STATUS:</label>
 
-                <label>AVAILABLE</label>
+                <label >AVAILABLE</label>
                 @Html.RadioButtonFor(m => m.STATUS, "AVAILABLE")
 
-                <label>NOT AVAILABLE</label>
+                <label style="padding-left:10px">NOT AVAILABLE</label>
                 @Html.RadioButtonFor(m => m.STATUS, "NOT AVAILABLE")
                 <br />
             </div>
@@ -78,14 +77,14 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default" />
+                    <input type="submit" value="Save" class="btn btn-warning" />
                 </div>
             </div>
         </div>
         
 
         <div>
-            @Html.ActionLink("Back to List", "Books")
+            @Html.ActionLink("Back to List", "Books", new { @class = "btn btn-primary" })
         </div>
         </div>
 }

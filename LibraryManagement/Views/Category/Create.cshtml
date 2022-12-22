@@ -4,14 +4,34 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
+<head>
+    <style>
+        body {
+            background-size: cover; /* <------ */
+            background-repeat: no-repeat;
+            background-image: url('../../Content/image/home-bg.jpg');
+        }
+
+        #inside-box {
+            border: 1px solid black;
+            margin: 10% auto 10% auto;
+            max-width: 500px;
+            min-width: 300px;
+            padding-left: 60px;
+            padding-right: 60px;
+            border-radius: 10px;
+            background-color: whitesmoke;
+        }
+    </style>
+</head>
 
 @using (Html.BeginForm())
 {
+    <div id="inside-box">
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Category</h4>
+        <h4>Add New Category</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -30,12 +50,14 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "CategoryList")
+    @Html.ActionLink("Back to List", "CategoryList", new { @class = "btn btn-primary"})
 </div>
+</div>
+}

@@ -26,20 +26,17 @@
                         <ul class="nav navbar-nav">
                             <li>@Html.ActionLink("Login", "Login", "Login")</li>
                             <li>@Html.ActionLink("Register", "Index", "Users")</li>
-                            <li>@Html.ActionLink("About", "About", "Home")</li>
-                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-
                         </ul>
                     </div>
-
                 }
                 else
                 {
                     <div class="navbar-collapse collapse">
                         <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Books", "Books", "Books")</li>
+                            <li>@Html.ActionLink("Category", "CategoryList", "Category")</li>
                             <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                            <li>@Html.ActionLink("Book List", "Books", "Books")</li>
-                            <li>@Html.ActionLink("Category List", "CategoryList", "Category")</li>
+                            <li>@Html.ActionLink("About", "About", "Home")</li>
                         </ul>
                         <div style="float:right;">
                             <ul class="nav navbar-nav" style="color:white; margin-top:15px;">

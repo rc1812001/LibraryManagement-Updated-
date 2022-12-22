@@ -1,14 +1,11 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using LibraryManagement.Common;
+﻿using LibraryManagement.Common;
 using LibraryManagement.Web.Models;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using CaptchaMvc.HtmlHelpers;
 
 namespace LibraryManagement.Web.Controllers
 {
@@ -55,6 +52,14 @@ namespace LibraryManagement.Web.Controllers
         {
             try
             {
+                // Code for validating the Captcha  
+                if (!this.IsCaptchaValid("Captcha is not valid"))
+                {
+
+                    ViewBag.Message = "Captcha is not Valid.Try again!";
+                    return View(objUser);
+                }
+
                 if (ModelState.IsValid)
                 {
                     Password decryptPassword = new Password();
@@ -68,7 +73,7 @@ namespace LibraryManagement.Web.Controllers
                         {
                             Session["USER_ID"] = obj.USER_ID.ToString();
                             Session["USER_NAME"] = obj.USER_NAME.ToString();
-                            return RedirectToAction("Books", "Books");
+                            return RedirectToAction("Index", "Home");
                         }
                         else
                         {

@@ -4,7 +4,7 @@
 }
 
 <link href="../Content/StyleSheet.css" rel="stylesheet" />
-<h1>Sacred Knowledge Library</h1>
+<h1><strong>Advanced Library</strong></h1>
 
 @if (Session["UserName"] != null)
 {
@@ -39,7 +39,7 @@
         var grid = new WebGrid(source: Model, canPage: true, rowsPerPage: 5, defaultSort: "CATEGORY_ID");
         if (Model.Count() > 0)
         {
-            <div><strong> @ViewBag.SearchParameter</strong> | @grid.TotalRowCount @Html.Label("Record(s) found")</div>
+            <div><strong> @ViewBag.SearchParameter</strong> <div align="right"> @grid.TotalRowCount @Html.Label("Record(s) found")</div></div>
             @grid.GetHtml(tableStyle: "PGrid", headerStyle: "Header", htmlAttributes: new { id = "DataTable" }, columns: grid.Columns(
             grid.Column("CATEGORY_ID", "Category ID"),
             grid.Column("CATEGORY_NAME", "Category Name")));
@@ -53,6 +53,6 @@
 
 @using (Html.BeginForm("Create", "Category", FormMethod.Get))
 {
-    <input type="submit" value="Add " />
+    <input type="submit" value="Add " class="btn btn-success btn-block" />
 }
 

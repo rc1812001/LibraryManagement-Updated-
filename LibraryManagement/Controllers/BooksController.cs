@@ -9,13 +9,14 @@ using System.Web;
 using NLog;
 using System.Web.Mvc;
 using Logger = NLog.Logger;
+using DocumentFormat.OpenXml.Office2010.Excel;
 
 namespace LibraryManagement.Controllers
 {
     public class BooksController : Controller
     {
 
-        public readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        public readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger(); //using NLog for logging
 
         readonly ProjectDBEntities4 db = new ProjectDBEntities4();
 
@@ -23,7 +24,7 @@ namespace LibraryManagement.Controllers
         public ActionResult Search(string q)
         {
 
-            var books = from b in db.BOOKs select b;
+            var books = from book in db.BOOKs select book;
 
             try
             {
@@ -241,7 +242,7 @@ namespace LibraryManagement.Controllers
 
             //--------------------------- DELETE ------------------------------------- //
             //redirects to delete view with book data to be deleted
-            public ActionResult Delete(int id)
+            public ActionResult Delete(int Id)
             {
                 try
                 {
@@ -249,16 +250,16 @@ namespace LibraryManagement.Controllers
                     {
                         return RedirectToAction("Login", "Login");
                     }
+                var books = db.BOOKs.Where(a => a.BOOK_ID == Id).FirstOrDefault();
+                BookModel bookModel = new BookModel();
 
-                    var book = db.BOOKs.Where(b => b.BOOK_ID == id).FirstOrDefault();
-                    BookModel bookModel = new BookModel();
-                    bookModel.BOOK_ID = book.BOOK_ID;
-                    bookModel.BOOK_NAME = book.BOOK_NAME;
-                    bookModel.CATEGORY = book.CATEGORY;
-                    bookModel.STATUS = book.STATUS;
-                    bookModel.AUTHOR = book.AUTHOR;
-
-                    return View(bookModel);
+                bookModel.BOOK_ID = books.BOOK_ID;
+                bookModel.BOOK_NAME = books.BOOK_NAME;
+                bookModel.CATEGORY = books.CATEGORY;
+                bookModel.STATUS = books.STATUS;
+                bookModel.AUTHOR = books.AUTHOR;
+                return View(bookModel);
+;
                 }
                 catch (Exception ex)
                 {
@@ -269,8 +270,8 @@ namespace LibraryManagement.Controllers
             }
 
 
-            [HttpPost]
-            [ValidateAntiForgeryToken]
+        [HttpPost]
+           
 
             // Deletes given book from using id
             public ActionResult Delete(BookModel bookModel)
@@ -282,13 +283,13 @@ namespace LibraryManagement.Controllers
                         return RedirectToAction("Login", "Login");
                     }
 
-                    var data = db.BOOKs.Where(b => b.BOOK_ID == bookModel.BOOK_ID).FirstOrDefault();
-                    data.UPDATED_BY = Session["USER_NAME"].ToString();
+
+                   var data = db.BOOKs.Where(a => a.BOOK_ID == bookModel.BOOK_ID).FirstOrDefault();
                     db.SaveChanges();
                     db.BOOKs.Remove(data);
-                    db.SaveChanges();
+                     db.SaveChanges();
                     return RedirectToAction("Books");
-                }
+            }
 
 
                 catch (Exception ex)

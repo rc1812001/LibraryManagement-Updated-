@@ -1,4 +1,5 @@
 ﻿@model  LibraryManagement.Web.Models.LoginModel
+@using CaptchaMvc.HtmlHelpers
 @{
     ViewBag.Title = "View";
 }
@@ -14,7 +15,7 @@
             border: 1px solid black;
             margin: 10% auto 10% auto;
             max-width: 500px;
-            min-width: 200px;
+            min-width: 300px;
             padding-left: 60px;
             padding-right: 60px;
             border-radius: 10px;
@@ -36,7 +37,7 @@
 {
     <div id="inside-box">
         <fieldset>
-            <center style="padding-top:15px;">Advanced Library</center>
+            <center style="padding-top:15px;"><h2><strong>Advanced Library</strong></h2></center>
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
 
@@ -60,12 +61,18 @@
                     <td style="color:red">@Html.ValidationMessageFor(a => a.PASSWORD)</td>
                 </tr>
                 <tr>
+
+                   <td> @Html.MathCaptcha()</td>
+                   <td style="color:red">@ViewBag.ErrorMessage</td> 
+                    <td></td>
+                </tr>
+                <tr>
                     <td></td>
                     <td>
-                        <input style="margin-left:10px; height:35px; width:100px;" class="btn btn-success btn-block" type="submit" value="Login" />
+                        <input style="margin-right:20px; height:35px;width:80px;" class="btn btn-success btn-block" type="submit" value="Login" />
                     </td>
                     <td>
-                        @Html.ActionLink("Not an existing user? Register here", "Index", "Users")
+                        @Html.ActionLink("Register here", "Index", "Users", new { @class = "btn btn-primary" })
                     </td>
                 </tr>
             </table>
