@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Office2010.Excel;
 using LibraryManagement.Common;
 using LibraryManagement.Web.Models;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,19 +14,38 @@ namespace LibraryManagement.Web.Controllers
 {
     public class LoginController : Controller
     {
+        public readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         // GET: Login
         //Returns login view page
         public ActionResult Login()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = ex.Message;
+                Logger.Error(ex);
+                return View("~/Views/Shared/Error.cshtml");
+            }
         }
 
         // Ends current session and redirects to login
         public ActionResult LogOut()
         {
-            Session.Clear();
-            FormsAuthentication.SignOut();
-            return RedirectToAction("Login");
+            try
+            {
+                Session.Clear();
+                FormsAuthentication.SignOut();
+                return RedirectToAction("Login");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = ex.Message;
+                Logger.Error(ex);
+                return View("~/Views/Shared/Error.cshtml");
+            }
         }
 
         [HttpPost]
@@ -33,28 +53,37 @@ namespace LibraryManagement.Web.Controllers
 
         public ActionResult Login(LoginModel objUser)
         {
-            if (ModelState.IsValid)
+            try
             {
-                Password decryptPassword = new Password();
-                //PasswordBase64 decryptPassword = new PasswordBase64();
-
-                using (ProjectDBEntities4 db = new ProjectDBEntities4())
+                if (ModelState.IsValid)
                 {
+                    Password decryptPassword = new Password();
+                    //PasswordBase64 decryptPassword = new PasswordBase64();
 
-                    var obj = db.USERs.ToList().Where(model => model.USER_NAME.Equals(objUser.USER_NAME) && decryptPassword.DecryptPassword(model.PASSWORD).Equals(objUser.PASSWORD)).FirstOrDefault();
-                    if (obj != null && decryptPassword.DecryptPassword(obj.PASSWORD) == objUser.PASSWORD)
+                    using (ProjectDBEntities4 db = new ProjectDBEntities4())
                     {
-                        Session["USER_ID"] = obj.USER_ID.ToString();
-                        Session["USER_NAME"] = obj.USER_NAME.ToString();
-                        return RedirectToAction("Books","Books");
-                    }
-                    else
-                    {
-                        ViewBag.Message = "UserName or Password is incorrect";
+
+                        var obj = db.USERs.ToList().Where(model => model.USER_NAME.Equals(objUser.USER_NAME) && decryptPassword.DecryptPassword(model.PASSWORD).Equals(objUser.PASSWORD)).FirstOrDefault();
+                        if (obj != null && decryptPassword.DecryptPassword(obj.PASSWORD) == objUser.PASSWORD)
+                        {
+                            Session["USER_ID"] = obj.USER_ID.ToString();
+                            Session["USER_NAME"] = obj.USER_NAME.ToString();
+                            return RedirectToAction("Books", "Books");
+                        }
+                        else
+                        {
+                            ViewBag.Message = "UserName or Password is incorrect";
+                        }
                     }
                 }
+                return View(objUser);
             }
-            return View(objUser);
+            catch (Exception ex)
+            {
+                ViewBag.Message = ex.Message;
+                Logger.Error(ex);
+                return View("~/Views/Shared/Error.cshtml");
+            }
         }
     }
 }

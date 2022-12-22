@@ -16,16 +16,19 @@
 
 @using (Html.BeginForm("Search", "Category", FormMethod.Post, new { @class = "Search-form" }))
 {
-    <div>
+    <div align ="right">
         @Html.RadioButton("SearchType", "0")
         @Html.Label("ID")
         @Html.RadioButton("SearchType", "1", true)
         @Html.Label("Category Name")
+
         <input type="text" name="q" placeholder="Search Category" />
         <input type="submit" value="Search" id="btnSubmit" />
         @if (ViewBag.Message != null)
         {
-            @ViewBag.Message.ToString();
+            <div style="color:red">
+                @ViewBag.Message.ToString();
+            </div>
         }
     </div>
 }

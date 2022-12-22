@@ -1,43 +1,48 @@
 ﻿using LibraryManagement.Models;
 using log4net;
+using log4net.Repository.Hierarchy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
+using NLog;
 using System.Web.Mvc;
+using Logger = NLog.Logger;
 
 namespace LibraryManagement.Controllers
 {
     public class BooksController : Controller
     {
 
+        public readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-        ProjectDBEntities4 db = new ProjectDBEntities4();
+        readonly ProjectDBEntities4 db = new ProjectDBEntities4();
+
         // To Search input string in Books based on id or Name/Category
         public ActionResult Search(string q)
         {
+
             var books = from b in db.BOOKs select b;
-            int id = Convert.ToInt32(Request["SearchType"]);
-            var searchParameter = "Search result for ";
+
             try
             {
+                if (Session["USER_ID"] == null)
+                {
+                    return RedirectToAction("Login", "Login");
+                }
+
+                int ID = Convert.ToInt32(Request["SearchType"]);
+                var searchParameter = "Search result for ";
+
                 if (!string.IsNullOrWhiteSpace(q))
                 {
-                    switch (id)
+                    switch (ID)
                     {
                         case 0:
-                            try
-                            {
-                                int.TryParse(q, out int iQ);
-                                books = books.Where(b => b.BOOK_ID.Equals(iQ));
-                                searchParameter += " Id = ' " + q + " '";
-                            }
-                            catch (Exception)
-                            {
-                                ViewBag.Message = "Enter int .";
-
-                            }
+                            int iQ = int.Parse(q);
+                            books = books.Where(b => b.BOOK_ID.Equals(iQ));
+                            searchParameter += " Id = ' " + q + " '";
                             break;
                         case 1:
                             books = books.Where(b => b.BOOK_NAME.Contains(q) || b.CATEGORY.Contains(q));
@@ -51,28 +56,39 @@ namespace LibraryManagement.Controllers
                     searchParameter += "ALL";
                 }
                 ViewBag.SearchParameter = searchParameter;
-                var finalbooks = db.BOOKs.Any() ? books.ToList() : new List<BOOK>();
-                return View("Books", finalbooks);
+                return View("Books", books);
             }
             catch (Exception ex)
             {
                 ViewBag.Message = ex.Message;
+                Logger.Error(ex);
                 return View("Books", books);
             }
         }
         // ------------------------------ BOOKS LIST -------------------------------------------//
-        // Returns list of books to view if session is on else redirects to login 
+        // Returns list of books to view if session is active is on else redirects to login 
         public ActionResult Books()
         {
-            if (Session["USER_ID"] != null)
+            try
             {
 
-                return View(db.BOOKs.ToList());
+                if (Session["USER_ID"] != null)
+                {
+
+                    return View(db.BOOKs.ToList());
+                }
+                else
+                {
+                    ViewBag.Message = "Username or password is incorrect.";
+                    return RedirectToAction("Login");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ViewBag.Message = "Username or password is incorrect.";
-                return RedirectToAction("Login");
+
+                ViewBag.Message = ex.Message;
+                Logger.Error(ex);
+                return View("~/Views/Shared/Error.cshtml");
             }
         }
 
@@ -80,9 +96,23 @@ namespace LibraryManagement.Controllers
         //Returns create view
         public ActionResult Create()
         {
-            ViewBag.CategoryList = db.CATEGORies.Select(c => c.CATEGORY_NAME).ToList();
-            
-            return View();
+            try
+            {
+                if (Session["USER_ID"] == null)
+                {
+                    return RedirectToAction("Login", "Login");
+                }
+
+                ViewBag.CategoryList = db.CATEGORies.Select(c => c.CATEGORY_NAME).ToList();
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = ex.Message;
+                Logger.Error(ex);
+                return View("~/Views/Shared/Error.cshtml");
+            }
 
         }
 
@@ -90,88 +120,185 @@ namespace LibraryManagement.Controllers
         [ValidateAntiForgeryToken]
 
         //Adds a new book to database based on data from create view
-        public ActionResult Create(BookModel Book)
+        public ActionResult Create(BookModel bookModel)
         {
-            ViewBag.CategoryList = db.CATEGORies.Select(c => c.CATEGORY_NAME).ToList();
-            if (ModelState.IsValid)
+            try
             {
-                BOOK book = new BOOK();
+                if (Session["USER_ID"] == null)
+                {
+                    return RedirectToAction("Login", "Login");
+                }
+                ViewBag.CategoryList = db.CATEGORies.Select(c => c.CATEGORY_NAME).ToList();
 
-              
+                if (ModelState.IsValid)
+                {
+                    BOOK book = new BOOK();
 
-                book.BOOK_NAME = Book.BOOK_NAME;
-                book.CATEGORY = Book.CATEGORY;
-                book.STATUS = book.STATUS;  
-                book.CREATED_BY = Session["USER_NAME"].ToString();
-                book.CREATE_TIMESTAMP = DateTime.Now;
-                db.BOOKs.Add(book);
-                db.SaveChanges();
-                return RedirectToAction("Books");
+                    book.BOOK_NAME = bookModel.BOOK_NAME;
+                    book.CATEGORY = bookModel.CATEGORY;
+                    book.STATUS = bookModel.STATUS;
+                    book.AUTHOR = bookModel.AUTHOR;
+                    book.CREATED_BY = Session["USER_NAME"].ToString();
+                    book.CREATE_TIMESTAMP = DateTime.Now;
+                    db.BOOKs.Add(book);
+                    db.SaveChanges();
+                    return RedirectToAction("Books");
+                }
+                else
+                {
+                    return View("Create");
+                }
+
             }
-          else
+            catch (Exception ex)
             {
-                return View("Create");
-            }
 
+                ViewBag.Message = ex.Message;
+                Logger.Error(ex);
+                return View("~/Views/Shared/Error.cshtml");
+            }
         }
         //----------------------------------- EDIT ---------------------------//
         public ActionResult Edit(int Id)
-        {
+            {
 
-            // To fill data in the form
-            // to enable easy editing
+                // To fill data in the form
+                // to enable easy editing
 
-            var books = db.BOOKs.Where(a => a.BOOK_ID == Id).FirstOrDefault();
-            ViewBag.CategoryList = db.CATEGORies.Select(c => c.CATEGORY_NAME).ToList();
+                try
+                {
+                    if (Session["USER_ID"] == null)
+                    {
+                        return RedirectToAction("Login", "Login");
+                    }
 
-            return View(books);
 
+                    var books = db.BOOKs.Where(a => a.BOOK_ID == Id).FirstOrDefault();
+                    ViewBag.CategoryList = db.CATEGORies.Select(c => c.CATEGORY_NAME).ToList();
+                    BookModel bookModel = new BookModel();
+
+                    bookModel.BOOK_ID = books.BOOK_ID;
+                    bookModel.BOOK_NAME = books.BOOK_NAME;
+                    bookModel.CATEGORY = books.CATEGORY;
+                    bookModel.STATUS = books.STATUS;
+                    bookModel.AUTHOR = books.AUTHOR;
+                    return View(bookModel);
+
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = ex.Message;
+                    Logger.Error(ex);
+                    return View("~/Views/Shared/Error.cshtml");
+                }
+
+            }
+
+
+            [HttpPost]
+            // To edit book data and save it to database
+            public ActionResult Edit(BookModel bookModel)  //passing id , book tb obj as paaramters
+            {
+                // Use of lambda expression to access
+                // particular record from a database
+
+                try
+                {
+                    if (Session["USER_ID"] == null)
+                    {
+                        return RedirectToAction("Login", "Login");
+                    }
+                    ViewBag.CategoryList = db.CATEGORies.Select(c => c.CATEGORY_NAME).ToList();
+
+                    if (ModelState.IsValid)
+                    {
+                        var data = db.BOOKs.Where(a => a.BOOK_ID == bookModel.BOOK_ID).FirstOrDefault();
+
+
+                        data.BOOK_NAME = bookModel.BOOK_NAME;     //selected parameters are here
+                        data.CATEGORY = bookModel.CATEGORY;
+                        data.STATUS = bookModel.STATUS;
+                        data.AUTHOR = bookModel.AUTHOR;
+                        data.UPDATED_BY = Session["USER_NAME"].ToString();
+                        data.UPDATE_TIMESTAMP = DateTime.Now;
+
+                        db.SaveChanges();
+
+                        // It will redirect to Books 
+                        return RedirectToAction("Books");
+                    }
+                    return View(bookModel);
+                }
+
+                catch (Exception ex)
+                {
+                    ViewBag.Message = ex.Message;
+                    Logger.Error(ex);
+                    return View("~/Views/Shared/Error.cshtml");
+                }
+            }
+
+
+            //--------------------------- DELETE ------------------------------------- //
+            //redirects to delete view with book data to be deleted
+            public ActionResult Delete(int id)
+            {
+                try
+                {
+                    if (Session["USER_ID"] == null)
+                    {
+                        return RedirectToAction("Login", "Login");
+                    }
+
+                    var book = db.BOOKs.Where(b => b.BOOK_ID == id).FirstOrDefault();
+                    BookModel bookModel = new BookModel();
+                    bookModel.BOOK_ID = book.BOOK_ID;
+                    bookModel.BOOK_NAME = book.BOOK_NAME;
+                    bookModel.CATEGORY = book.CATEGORY;
+                    bookModel.STATUS = book.STATUS;
+                    bookModel.AUTHOR = book.AUTHOR;
+
+                    return View(bookModel);
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = ex.Message;
+                    Logger.Error(ex);
+                    return View("~/Views/Shared/Error.cshtml");
+                }
+            }
+
+
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+
+            // Deletes given book from using id
+            public ActionResult Delete(BookModel bookModel)
+            {
+                try
+                {
+                    if (Session["USER_ID"] == null)
+                    {
+                        return RedirectToAction("Login", "Login");
+                    }
+
+                    var data = db.BOOKs.Where(b => b.BOOK_ID == bookModel.BOOK_ID).FirstOrDefault();
+                    data.UPDATED_BY = Session["USER_NAME"].ToString();
+                    db.SaveChanges();
+                    db.BOOKs.Remove(data);
+                    db.SaveChanges();
+                    return RedirectToAction("Books");
+                }
+
+
+                catch (Exception ex)
+                {
+                    ViewBag.Message = ex.Message;
+                    Logger.Error(ex);
+                    return View("~/Views/Shared/Error.cshtml");
+                }
+            }
         }
 
-        [HttpPost]
-
-        public ActionResult Edit(int Id, BOOK book)  //passing id , book tb obj as paaramters
-        {
-            // Use of lambda expression to access
-            // particular record from a database
-
-            var data = db.BOOKs.Where(a => a.BOOK_ID == Id).FirstOrDefault();
-
-          
-                data.BOOK_NAME = book.BOOK_NAME;     //selected parameters are here
-                data.CATEGORY = book.CATEGORY;
-                data.STATUS = book.STATUS;
-                data.AUTHOR = book.AUTHOR;
-                data.UPDATED_BY = Session["USER_NAME"].ToString();
-                data.UPDATE_TIMESTAMP = DateTime.Now;
-                db.SaveChanges();
-
-                // It will redirect to Books 
-                return RedirectToAction("Books");
-            
-            
-        }
-         //--------------------------- DELETE ------------------------------------- //
-        //redirects to delete view with book data to be deleted
-        public ActionResult Delete(int id)
-        {
-
-            var book = db.BOOKs.Where(b => b.BOOK_ID == id).FirstOrDefault();
-            return View(book);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-
-        // Deletes given book from using id
-        public ActionResult Delete(BOOK book, int id)
-        {
-            var books = db.BOOKs.Where(b => b.BOOK_ID == id).FirstOrDefault();
-            db.BOOKs.Remove(books);
-            db.SaveChanges();
-            return RedirectToAction("Books");
-        }
     }
-
-}
 

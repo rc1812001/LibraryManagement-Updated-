@@ -19,12 +19,12 @@ namespace LibraryManagement.Web.Models
 
         [Display(Name = "First Name")] //used for dynamic changes in MVC
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter UserName")]
-        [StringLength(20, MinimumLength = 5, ErrorMessage = "UserName should be min 5 and max 20 characters long")]  //Validation using Regex
+        [StringLength(20, MinimumLength = 5, ErrorMessage = "FirstName should be min 5 and max 20 characters long")]  //Validation using Regex
         public string FIRST_NAME { get; set; }
 
         [Display(Name = "Last Name")] //used for dynamic changes in MVC
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter UserName")]
-        [StringLength(20, MinimumLength = 5, ErrorMessage = "UserName should be min 5 and max 20 characters long")]  //Validation using Regex
+        [StringLength(20, MinimumLength = 5, ErrorMessage = "LastName should be min 5 and max 20 characters long")]  //Validation using Regex
         public string LAST_NAME { get; set; }
 
 
@@ -34,7 +34,7 @@ namespace LibraryManagement.Web.Models
         public string MOBILE { get; set; }
 
         [Display(Name = "Email")]
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter Email")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter Email ID")]
         public string EMAIL_ID { get; set; }
 
         [Display(Name = "Password")]

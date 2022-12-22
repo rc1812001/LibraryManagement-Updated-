@@ -1,14 +1,6 @@
 ﻿html {
     height: 100%;
 }
-body {
-    
-    color: #1A1A1A;
-    font-size: 1.5em;
-    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
-    margin: 1.5em;
-    padding: 0;
-}
 
 .PGrid {
     margin: 2%;
@@ -16,12 +8,7 @@ body {
     width: 95%;
 }
 
-.Header {
-    font-weight: bold;
-    background-color: antiquewhite;
-    color: antiquewhite;
-    text-decoration: none;
-}
+
 
 .PGrid th, .PGrid td {
     border: 1px solid #0094ff;
@@ -30,10 +17,12 @@ body {
 }
 
 body {
-    height: 100%;
     margin: 0;
+    /*
+        
     background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-attachment: fixed;*/
+    
     background: rgb(34,193,195);
     background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
 }

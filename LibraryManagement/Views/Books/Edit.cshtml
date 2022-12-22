@@ -1,65 +1,91 @@
-﻿@model LibraryManagement.BOOK
+﻿@model LibraryManagement.Models.BookModel
 
 @{
     ViewBag.Title = "Edit";
 }
+<head>
+    <style>
+        body {
+            background-size: cover; /* <------ */
+            background-repeat: no-repeat;
+            background-image: url('../../Content/image/bg-img-view.jpg');
+        }
+
+        #inside-box {
+            border: 1px solid black;
+            margin: 10% auto 10% auto;
+         /*   max-width: 500px;
+            min-width: 400px;*/
+            padding-left: 60px;
+            padding-right: 30px;
+            border-radius: 10px;
+            background-color: whitesmoke;
+        }
+
+    </style>
+</head>
 
 <h2>Edit</h2>
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <h4>Book</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.BOOK_ID)
+    <div id="inside-box">
+        @Html.AntiForgeryToken()
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.BOOK_NAME, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.BOOK_NAME, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.BOOK_NAME, "", new { @class = "text-danger" })
+        <div class="form-horizontal">
+            <h4>Book</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.BOOK_ID)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BOOK_NAME, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BOOK_NAME, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BOOK_NAME, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.CATEGORY, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+
+                    @Html.DropDownListFor(model => model.CATEGORY, new SelectList(ViewBag.CategoryList), "---Select Category---", new { @class = "dropdown", style = "margin-bottom : 7px;height: 23px;width: 179px;" })
+                    @Html.ValidationMessageFor(model => model.CATEGORY, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group" style="padding-left:100px">
+                <label>STATUS:</label>
+
+                <label>AVAILABLE</label>
+                @Html.RadioButtonFor(m => m.STATUS, "AVAILABLE")
+
+                <label>NOT AVAILABLE</label>
+                @Html.RadioButtonFor(m => m.STATUS, "NOT AVAILABLE")
+                <br />
+            </div>
+
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.AUTHOR, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.AUTHOR, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.AUTHOR, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
         </div>
-    </div>
+        
 
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.CATEGORY, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-
-            @Html.DropDownListFor(model => model.CATEGORY, new SelectList(ViewBag.CategoryList), new { @class = "dropdown", style = "margin-bottom : 7px;height: 23px;width: 179px;" })
-            @Html.ValidationMessageFor(model => model.CATEGORY, "", new { @class = "text-danger" })
+        <div>
+            @Html.ActionLink("Back to List", "Books")
         </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.STATUS, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.STATUS, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.STATUS, "", new { @class = "text-danger" })
         </div>
-    </div>
-
-
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.AUTHOR, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.AUTHOR, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.AUTHOR, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
-        </div>
-    </div>
-</div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Books")
-</div>

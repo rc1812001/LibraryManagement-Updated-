@@ -36,7 +36,7 @@
 {
     <div id="inside-box">
         <fieldset>
-            <center><legend style="padding-top:15px;">Advanced Library</legend></center>
+            <center style="padding-top:15px;">Advanced Library</center>
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
 
@@ -47,10 +47,10 @@
                 </div>
             }
 
-            <table style="border-collapse: separate; border-spacing: 0 15px ">
+            <table style="border-collapse: separate; border-spacing: 0 10px ">
                 <tr>
                     <td>@Html.LabelFor(a => a.USER_NAME)</td>
-                    <td>@Html.TextBoxFor(a => a.USER_NAME, new { @class = "", placeholder = "Enter UserName", style = "margin-bottom:8px;" })
+                    <td>@Html.TextBoxFor(a => a.USER_NAME, new { @class = "", placeholder = "Enter UserName", style = "margin-bottom:8px;" })</td>
                     <td style="color:red ">@Html.ValidationMessageFor(a => a.USER_NAME)</td>
 
                 </tr>

@@ -12,7 +12,7 @@ namespace LibraryManagement.Models
             public int BOOK_ID { get; set; }
 
             [Display(Name = "BOOK NAME")] //used for dynamic changes in MVC
-            [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter UserName")]
+            [Required(AllowEmptyStrings = false, ErrorMessage = "Please enter BOOK NAME")]
             public string BOOK_NAME { get; set; }
 
             [Display(Name = "CATEGORY")] //used for dynamic changes in MVC

@@ -1,0 +1,14 @@
+------Error(2022-12-20 22:08:06.7776)BRD-3MFJKM3-L------
+
+                      Exception Type:System.FormatException |
+                      Exception Message:Input string was not in a correct format. |
+                      Stack Trace: |
+                      Additional Info:System.FormatException: Input string was not in a correct format.
+
+------Error(2022-12-20 22:08:39.8657)BRD-3MFJKM3-L------
+
+                      Exception Type:System.FormatException |
+                      Exception Message:Input string was not in a correct format. |
+                      Stack Trace: |
+                      Additional Info:System.FormatException: Input string was not in a correct format.
+
